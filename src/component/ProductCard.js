@@ -1,13 +1,18 @@
 import React from 'react'
+import { useNavigate } from "react-router"
 
-const ProductCard = () => {
+const ProductCard = ({ item }) => {
+    const navigate = useNavigate();
+    const showDetail = () => {
+        navigate(`/product/${item.id}`)
+    }
     return (
-        <div>
-            <img src="https://tooneul.com/web/product/big/202312/fe809b54954800922abcab9c8fb5e1e8.jpg" />
-            <div>Consicious choice</div>
-            <div>벨티드 트월 코트</div>
-            <div>₩99900</div>
-            <div>신제품</div>
+        <div className="product-card" onClick={showDetail}>
+            <img src={item?.img} />
+            <div>{item?.choice == true ? "Consicious choice" : ""}</div>
+            <div>{item?.title}</div>
+            <div>₩{item?.price}</div>
+            <div>{item?.new == true ? "신제품" : ""}</div>
         </div>
     )
 }
