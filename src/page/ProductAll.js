@@ -5,7 +5,7 @@ import { Container, Row, Col } from "react-bootstrap";
 const ProductAll = () => {
     const [productList, setProductList] = useState([]);
     const getProducts = async () => {
-        let url = `http://localhost:5000/products/`
+        let url = `https://my-json-server.typicode.com/KimoonH/ShoppingMall-app/products/`
         let response = await fetch(url)
         let data = await response.json();
         setProductList(data)
@@ -19,18 +19,18 @@ const ProductAll = () => {
         <div>
             <Container>
                 <Row>
-                    {productList.map((menu) => {
-                        <ProductCard item={menu} />
-                    })}
-
-                    <Col lg={3}><ProductCard /></Col>
-                    <Col lg={3}><ProductCard /></Col>
-                    <Col lg={3}><ProductCard /></Col>
+                    {productList.map((menu) => (
+                        <Col lg={3}>
+                            <ProductCard item={menu} />
+                        </Col>
+                    ))}
                 </Row>
             </Container>
             <ProductCard />
         </div>
-    )
+    );
+
+
 }
 
 export default ProductAll

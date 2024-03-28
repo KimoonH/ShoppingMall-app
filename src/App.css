@@ -2,6 +2,7 @@
     display: flex;
     justify-content: flex-end;
     margin: 20px;
+    cursor: pointer;
 }
 
 .nav-section{
@@ -21,4 +22,21 @@
 .menu-area{
     display: flex;
     justify-content: center;
+    padding-left: 300px;
 }
+
+.product-card img{
+    width: 100%;
+}
+
+.menu-area input {
+    border: none;
+    border-bottom: 2px solid black;
+    padding-bottom: 4px;
+}
+
+.menu-area div{
+    position: relative;
+    padding-left: 200px;
+}
+
