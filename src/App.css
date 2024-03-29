@@ -40,3 +40,8 @@
     padding-left: 200px;
 }
 
+.product-img{
+    display: flex;
+    justify-content: flex-end;
+}
+
