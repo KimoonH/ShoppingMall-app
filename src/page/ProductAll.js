@@ -1,40 +1,47 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import ProductCard from "../component/ProductCard";
-import { Container, Row, Col } from "react-bootstrap";
+import { Row, Col, Container, Alert } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
+import { productAction } from "../redux/actions/productAction";
+import { useDispatch, useSelector } from "react-redux";
+
 
 const ProductAll = () => {
-    const [productList, setProductList] = useState([]);
+    let products = useSelector(state => state.product.products)
     const [query, setQuery] = useSearchParams();
-    const getProducts = async () => {
-        let searchQuery = query.get('q') || "";
-        console.log("쿼리값은?", searchQuery)
-        let url = `https://my-json-server.typicode.com/KimoonH/ShoppingMall-app/products?q=${searchQuery}`
-        let response = await fetch(url)
-        let data = await response.json();
-        setProductList(data)
+    let [error, setError] = useState("");
+    const dispatch = useDispatch();
+
+    const getProducts = () => {
+        try {
+            let keyword = query.get("q") || "";
+            dispatch(productAction.getProducts(keyword))
+        } catch (err) {
+            setError(err.message);
+        }
     };
 
     useEffect(() => {
-        getProducts()
+        getProducts();
     }, [query]);
-
     return (
-        <div>
-            <Container>
+        <Container>
+            {error ? (
+                <Alert variant="danger" className="text-center">
+                    {error}
+                </Alert>
+            ) : (
                 <Row>
-                    {productList.map((menu) => (
-                        <Col lg={3}>
-                            <ProductCard item={menu} />
-                        </Col>
-                    ))}
+                    {products.length > 0 &&
+                        products.map((item) => (
+                            <Col md={3} sm={12} key={item.id}>
+                                <ProductCard item={item} />
+                            </Col>
+                        ))}
                 </Row>
-            </Container>
-            <ProductCard />
-        </div>
+            )}
+        </Container>
     );
+};
 
-
-}
-
-export default ProductAll
+export default ProductAll;

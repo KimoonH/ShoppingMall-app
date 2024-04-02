@@ -1,41 +1,41 @@
-import React from 'react'
-import { Container } from "react-bootstrap";
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import { useNavigate } from "react-router";
+import React, { useState } from "react";
+import { Container, Form, Button } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { authenticateAction } from "../redux/actions/authenticateAction";
 
-const Login = ({ setAuthenticate }) => {
+const Login = ({ setAuthenticate, to }) => {
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
+    console.log("tototo", to);
     const navigate = useNavigate();
-    const loginUser = (event) => {
+    const dispatch = useDispatch();
+
+    const login = (event) => {
         event.preventDefault();
-        setAuthenticate(true);
-        navigate("/")
-    }
+        dispatch(authenticateAction.login(id, password))
+        navigate("/");
+    };
     return (
-        <Container className="d-flex justify-content-center align-items-center mt-5">
-            <Form onSubmit={(event) => loginUser(event)}>
+        <Container className="login-area">
+            <Form className="login-form" onSubmit={login}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>ID</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" />
-                    <Form.Text className="text-muted">
-                        We'll never share your email with anyone else.
-                    </Form.Text>
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control type="email" placeholder="Enter email" onChange={(event) => setId(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" />
+                    <Form.Control type="password" placeholder="Password" onChange={(event) => setPassword(event.target.value)} />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" label="Check me out" />
-                </Form.Group>
+
                 <Button variant="danger" type="submit">
-                    로그인
+                    Login
                 </Button>
             </Form>
-        </Container >
-    )
-}
+        </Container>
+    );
+};
 
-export default Login
+export default Login;
 
