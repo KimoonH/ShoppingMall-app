@@ -1,6 +1,6 @@
 import { productActions } from "../store";
 
-function getProducts(keyword) {
+/*function getProducts(keyword) {
     return async (dispatch, getState) => {
         let url = `https://my-json-server.typicode.com/KimoonH/ShoppingMall-app/products/${keyword}`;
         let response = await fetch(url);
@@ -8,8 +8,8 @@ function getProducts(keyword) {
         //dispatch({ type: "GET_PRODUCT_SUCCESS", payload: { data } })
         dispatch(productActions.getAllProducts({ data }))
     };
-}
-function getProductDetail(id) {
+}*/
+/*function getProductDetail(id) {
     return async (dispatch) => {
         let url = `https://my-json-server.typicode.com/KimoonH/ShoppingMall-app/products/${id}`;
         let response = await fetch(url);
@@ -17,4 +17,4 @@ function getProductDetail(id) {
         dispatch({ type: "GET_SINGLE_PRODUCT_SUCCESS", payload: { data } });
     };
 }
-export const productAction = { getProducts, getProductDetail }
+export const productAction = { getProductDetail }*/

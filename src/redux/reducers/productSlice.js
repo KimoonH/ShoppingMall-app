@@ -2,11 +2,11 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 let initialState = {
     products: [],
     selectedItem: null,
-    isLoading: false;
-    error: null;
+    isLoading: false,
+    error: null,
 }
 
-const getProducts = createAsyncThunk(
+export const fetchProducts = createAsyncThunk(
     'product/fetchAll',
     async (keyword, thunkApi) => {
         try {
@@ -19,6 +19,13 @@ const getProducts = createAsyncThunk(
         }
     })
 
+export const fetchProductsDetail = createAsyncThunk(
+    'product/fetchDetail',
+    async (id) => {
+        let url = `https://my-json-server.typicode.com/KimoonH/ShoppingMall-app/products/${id}`;
+        let response = await fetch(url);
+        let data = await response.json();
+    })
 
 /*function productReducer(state = initialState, action) {
     let { type, payload } = action
@@ -40,22 +47,32 @@ const productSlice = createSlice({
     name: "product",
     initialState,
     reducers: {
-        getSingleProduct(state, action) {
-            state.selectedItem = action.payload.data;
-        },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getProducts.pending, () => {
+            .addCase(fetchProducts.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(getProducts.fulfilled, (state, action) => {
+            .addCase(fetchProducts.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.products = action.payload.data;
+                state.products = action.payload;
             })
-            .addCase(getProducts.rejected, (state, action) => {
+            .addCase(fetchProducts.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
+            })
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchProductsDetail.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(fetchProductsDetail.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.selectedItem = action.payload;
+            })
+            .addCase(fetchProductsDetail.rejected, (state) => {
+                state.isLoading = false;
             })
     }
 })

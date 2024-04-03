@@ -4,6 +4,7 @@ import { Row, Col, Container, Alert } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import { productAction } from "../redux/actions/productAction";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../redux/reducers/productSlice";
 
 
 const ProductAll = () => {
@@ -15,7 +16,7 @@ const ProductAll = () => {
     const getProducts = () => {
         try {
             let keyword = query.get("q") || "";
-            dispatch(productAction.getProducts(keyword))
+            dispatch(fetchProducts(keyword))
         } catch (err) {
             setError(err.message);
         }
