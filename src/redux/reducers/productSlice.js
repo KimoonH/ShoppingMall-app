@@ -61,9 +61,6 @@ const productSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.payload;
             })
-    },
-    extraReducers: (builder) => {
-        builder
             .addCase(fetchProductsDetail.pending, (state) => {
                 state.isLoading = true;
             })
@@ -74,7 +71,7 @@ const productSlice = createSlice({
             .addCase(fetchProductsDetail.rejected, (state) => {
                 state.isLoading = false;
             })
-    }
+    },
 })
 
 export default productSlice.reducer;
