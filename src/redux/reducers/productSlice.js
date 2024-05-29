@@ -1,31 +1,62 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
 let initialState = {
-    products: [],
+    productList: [],
     selectedItem: null,
     isLoading: false,
     error: null,
-}
+};
 
-export const fetchProducts = createAsyncThunk(
-    'product/fetchAll',
-    async (keyword, thunkApi) => {
-        try {
-            let url = `https://my-json-server.typicode.com/KimoonH/ShoppingMall-app/products/${keyword}`;
-            let response = await fetch(url);
-            let data = await response.json();
-            return await response.json();
-        } catch (error) {
-            thunkApi.rejectWithValue(error.message)
-        }
-    })
+export const fetchProducts = createAsyncThunk('product/fetchAll', async (searchQuery, thunkApi) => {
+    try {
+        let url = `https://my-json-server.typicode.com/KimoonH/ShoppingMall-app/products/${keyword}`;
+        let response = await fetch(url);
+        return await response.json();
+    } catch (error) {
+        thunkApi.rejectWithValue(error.message);
+    }
+});
 
-export const fetchProductsDetail = createAsyncThunk(
-    'product/fetchDetail',
-    async (id) => {
+export const fetchfetchProductsDetail = createAsyncThunk('product/fetchDetail', async (id, thunkApi) => {
+    try {
         let url = `https://my-json-server.typicode.com/KimoonH/ShoppingMall-app/products/${id}`;
         let response = await fetch(url);
-        let data = await response.json();
-    })
+        return await response.json();
+    } catch (error) {
+        thunkApi.rejectWithValue(error.message);
+    }
+});
+
+
+const productSlice = createSlice({
+    name: 'product',
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(fetchProducts.pending, (state) => {
+            state.isLoading = true;
+        })
+            .addCase(fetchProducts.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.productList = action.payload;
+            })
+            .addCase(fetchProducts.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+            .addCase(fetchfetchProductsDetail.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(fetchfetchProductsDetail.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.selectedItem = action.payload;
+            })
+            .addCase(fetchfetchProductsDetail.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+    }
+});
 
 /*function productReducer(state = initialState, action) {
     let { type, payload } = action
@@ -43,35 +74,7 @@ export const fetchProductsDetail = createAsyncThunk(
 
 export default productReducer;*/
 
-const productSlice = createSlice({
-    name: "product",
-    initialState,
-    reducers: {
-    },
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchProducts.pending, (state) => {
-                state.isLoading = true;
-            })
-            .addCase(fetchProducts.fulfilled, (state, action) => {
-                state.isLoading = false;
-                state.products = action.payload;
-            })
-            .addCase(fetchProducts.rejected, (state, action) => {
-                state.isLoading = false;
-                state.error = action.payload;
-            })
-            .addCase(fetchProductsDetail.pending, (state) => {
-                state.isLoading = true;
-            })
-            .addCase(fetchProductsDetail.fulfilled, (state, action) => {
-                state.isLoading = false;
-                state.selectedItem = action.payload;
-            })
-            .addCase(fetchProductsDetail.rejected, (state) => {
-                state.isLoading = false;
-            })
-    },
-})
+console.log('productSlice', productSlice);
 
+export const productActions = productSlice.actions;
 export default productSlice.reducer;

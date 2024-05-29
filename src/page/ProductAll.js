@@ -1,48 +1,40 @@
-import React, { useEffect, useState } from "react";
-import ProductCard from "../component/ProductCard";
-import { Row, Col, Container, Alert } from "react-bootstrap";
-import { useSearchParams } from "react-router-dom";
-import { productAction } from "../redux/actions/productAction";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../redux/reducers/productSlice";
+import React, { useEffect } from 'react'
+import ProductCard from '../component/ProductCard';
+import { Col, Container, Row } from 'react-bootstrap';
+import { useSearchParams } from 'react-router-dom';
+// import { productAction } from '../redux/actions/productAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts } from '../redux/reducers/productSlice';
 
 
 const ProductAll = () => {
-    let products = useSelector(state => state.product.products)
+    const productList = useSelector((state) => state.product.productList);
     const [query, setQuery] = useSearchParams();
-    let [error, setError] = useState("");
     const dispatch = useDispatch();
 
     const getProducts = () => {
-        try {
-            let keyword = query.get("q") || "";
-            dispatch(fetchProducts(keyword))
-        } catch (err) {
-            setError(err.message);
-        }
+        let searchQuery = query.get('q') || "";
+        console.log('쿼리값은?', searchQuery);
+        dispatch(fetchProducts(searchQuery));
     };
 
     useEffect(() => {
         getProducts();
     }, [query]);
-    return (
-        <Container>
-            {error ? (
-                <Alert variant="danger" className="text-center">
-                    {error}
-                </Alert>
-            ) : (
-                <Row>
-                    {products.length > 0 &&
-                        products.map((item) => (
-                            <Col md={3} sm={12} key={item.id}>
-                                <ProductCard item={item} />
-                            </Col>
-                        ))}
-                </Row>
-            )}
-        </Container>
-    );
-};
 
-export default ProductAll;
+    return (
+        <div>
+            <Container>
+                <Row>
+                    {productList.map((item) => (
+                        <Col lg={3} key={item.id}>
+                            <ProductCard item={item} />
+                        </Col>
+                    ))}
+                </Row>
+            </Container>
+        </div>
+    )
+}
+
+export default ProductAll
